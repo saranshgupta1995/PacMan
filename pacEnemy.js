@@ -2,20 +2,22 @@ class PacEnemy {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.pacEnemyFaceDirection = {
-            position: 10,
-            lookingRight: true
+        this.pacEnemyEyeData = {
+            position: 8,
+            direction: true,
+            eyeBallPosition: -2,
+            tick: 1
         };
 
-        this.pacEnemyDirections = {
-            x: 1,
-            y: 0
-        }
+        this.pacEnemyDirections = {};
+        this.pacEnemySpeed = {};
 
-        this.pacEnemySpeed = {
-            x: 1,
-            y: 0
-        }
+        this.changeDirections();
+
+        this.phase = {
+            phase: false,
+            element: 0
+        };
 
     }
 
@@ -24,6 +26,20 @@ class PacEnemy {
             x: this.x,
             y: this.y
         }
+    }
+
+    animateEyes() {
+        var data = this.pacEnemyEyeData;
+        data.tick++;
+        if (!(data.tick % 25)) {
+            data.direction = !data.direction;
+            data.tick=1
+        }
+        if (!(data.tick % 5)) {
+            data.position += data.direction ? 1 : -1
+            data.eyeBallPosition += data.direction ? 1 : -1
+        }
+        data.position += 0
     }
 
     setPacEnemyDirections(direction) {
@@ -66,20 +82,33 @@ class PacEnemy {
     }
 
     getCollisionWith(element) {
-        if (checkCollisions(...element, this.getPosition())) {
-            this.goBack();
-            this.changeDirections();
+        if (checkCollisions(...element, { ...this.getPosition(), x: this.getPosition().x + 4 })
+            || checkCollisions(...element, { ...this.getPosition(), x: this.getPosition().x - 4 })
+            || checkCollisions(...element, { ...this.getPosition(), y: this.getPosition().y + 4 })
+            || checkCollisions(...element, { ...this.getPosition(), y: this.getPosition().y - 4 })
+        ) {
+            if (this.phase.phase) {
+                return
+            }
+            let rarity = Math.random();
+            if (rarity < 0.95) {
+                this.goBack();
+                this.changeDirections();
+            } else {
+                this.phase.phase = true;
+                this.phase.element = element;
+            }
+        } else {
+            if (element == this.phase.element)
+                this.phase.phase = false;
         }
 
     }
 
-    saveCtx(ctx) {
-        this.ctx = ctx;
-    }
-
-    goForward() {
-        this.x += this.pacEnemySpeed.x;
-        this.y += this.pacEnemySpeed.y
+    goForward(units = 1) {
+        this.x += this.pacEnemySpeed.x * units;
+        this.y += this.pacEnemySpeed.y * units
+        this.animateEyes()
     }
 
     goBack() {
@@ -87,21 +116,27 @@ class PacEnemy {
         this.y -= this.pacEnemySpeed.y
     }
 
-    drawPacEnemy() {
-        this.ctx.beginPath();
+    drawPacEnemy(ctx) {
+        ctx.beginPath();
         let p2 = new Path2D(`M ${this.x - PACMAN_RADIUS},${this.y + PACMAN_RADIUS} 
         c 0,0 0,-2 0,-7 0,-1 1,-15 5,-18 3,-2 5,-3 10,-3 3,0 4,0 7,1 6,3 7,6 7,19 0,7 0,8 0,8 -1,1 -2,1 -5,-1 -1,-1 -2,-1 -5,-1 -0,0 -1,1 -2,2 -1,1 -2,2 -3,2 -0,0 -1,0 -3,-2 -3,-2 -3,-2 -4,-1 0,1 -4,4 -4,4 -0,0 0,0 -1,-1 z 
         z`);
-        this.ctx.fill(p2);
-        this.ctx.fillStyle = "white";
-        this.ctx.arc(this.x - PACMAN_RADIUS + 10, this.y + PACMAN_RADIUS - 16, 4.5, 0, 2 * Math.PI);
-        this.ctx.arc(this.x - PACMAN_RADIUS + 20, this.y + PACMAN_RADIUS - 16, 4.5, 0, 2 * Math.PI);
-        this.ctx.fill();
-        this.ctx.beginPath();
-        this.ctx.fillStyle = "black";
-        this.ctx.arc(this.x - PACMAN_RADIUS + 10 + 2, this.y + PACMAN_RADIUS - 16, 1.5, 0, 2 * Math.PI);
-        this.ctx.arc(this.x - PACMAN_RADIUS + 20 + 2, this.y + PACMAN_RADIUS - 16, 1.5, 0, 2 * Math.PI);
-        this.ctx.fill();
+        ctx.fill(p2);
+        ctx.fillStyle = "white";
+        ctx.arc(this.x - PACMAN_RADIUS + this.pacEnemyEyeData.position, this.y + PACMAN_RADIUS - 16, 4.5, 0, 2 * Math.PI);
+        ctx.arc(this.x - PACMAN_RADIUS + 10 + this.pacEnemyEyeData.position, this.y + PACMAN_RADIUS - 16, 4.5, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.fillStyle = "black";
+        ctx.arc(this.x - PACMAN_RADIUS + this.pacEnemyEyeData.position + this.pacEnemyEyeData.eyeBallPosition, this.y + PACMAN_RADIUS - 16, 1.5, 0, 2 * Math.PI);
+        ctx.arc(this.x - PACMAN_RADIUS + 10 + this.pacEnemyEyeData.position + this.pacEnemyEyeData.eyeBallPosition, this.y + PACMAN_RADIUS - 16, 1.5, 0, 2 * Math.PI);
+        ctx.fill();
     }
 }
 
+pacEnemies = [];
+
+for (let pacEnemy = 0; pacEnemy < PAC_ENEMY_NUM; pacEnemy++) {
+    let xShift = Math.random() * 120;
+    pacEnemies.push(new PacEnemy(400 - 60 + xShift, 400 + (Math.random() < 0.5 ? 20 : -20)));
+}
