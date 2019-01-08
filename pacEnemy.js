@@ -29,11 +29,12 @@ class PacEnemy {
     }
 
     animateEyes() {
+        if(Math.random()<0.1) return
         var data = this.pacEnemyEyeData;
         data.tick++;
         if (!(data.tick % 25)) {
             data.direction = !data.direction;
-            data.tick=1
+            data.tick = 1
         }
         if (!(data.tick % 5)) {
             data.position += data.direction ? 1 : -1
@@ -76,7 +77,9 @@ class PacEnemy {
 
 
     changeDirections() {
-        var directions = ['left', 'right', 'up', 'down']
+        var directions = ['left', 'right', 'up', 'down'];
+        directions.push(this.x < pacManPosition.x ? 'right' : 'left');
+        directions.push(this.y > pacManPosition.y ? 'up' : 'down');
         var direction = directions[Math.floor(Math.random() * directions.length)];
         this.setPacEnemyDirections(direction)
     }
@@ -95,8 +98,10 @@ class PacEnemy {
                 this.goBack();
                 this.changeDirections();
             } else {
-                this.phase.phase = true;
-                this.phase.element = element;
+                if (element[0] || element[1]) {
+                    this.phase.phase = true;
+                    this.phase.element = element;
+                }
             }
         } else {
             if (element == this.phase.element)
@@ -137,6 +142,6 @@ class PacEnemy {
 pacEnemies = [];
 
 for (let pacEnemy = 0; pacEnemy < PAC_ENEMY_NUM; pacEnemy++) {
-    let xShift = Math.random() * 120;
+    let xShift = Math.floor(Math.random() * 120);
     pacEnemies.push(new PacEnemy(400 - 60 + xShift, 400 + (Math.random() < 0.5 ? 20 : -20)));
 }
