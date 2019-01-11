@@ -158,7 +158,7 @@ class PacEnemy {
     drawPacEnemy(ctx) {
         ctx.beginPath();
         let p2 = new Path2D(`M ${this.x - PACMAN_RADIUS},${this.y + PACMAN_RADIUS} 
-        c 0,0 0,-2 0,-7 0,-1 1,-15 5,-18 3,-2 5,-3 10,-3 3,0 4,0 7,1 6,3 7,6 7,19 0,7 0,8 0,8 -1,1 -2,1 -5,-1 -1,-1 -2,-1 -5,-1 -0,0 -1,1 -2,2 -1,1 -2,2 -3,2 -0,0 -1,0 -3,-2 -3,-2 -3,-2 -4,-1 0,1 -4,4 -4,4 -0,0 0,0 -1,-1 z 
+        c 0,0 0,-2 0,-7 0,-1 1,-15 5,-18 3,-2 5,-3 10,-3 3,0 4,0 7,1 6,3 7,6 7,19 0,7 0,8 0,8 ${this.pacEnemyEyeData.eyeBallPosition - 1},${this.pacEnemyEyeData.eyeBallPosition + 1} -2,1 -5,-1 -1,-1 -2,-1 -5,-1 -0,0 -1,1 -2,2 -1,1 -2,2 -3,2 -0,0 -1,0 -3,-2 ${this.pacEnemyEyeData.eyeBallPosition - 3},${this.pacEnemyEyeData.eyeBallPosition - 2} ${this.pacEnemyEyeData.eyeBallPosition - 3},${this.pacEnemyEyeData.eyeBallPosition - 2} -4,-1 0,1 ${this.pacEnemyEyeData.eyeBallPosition - 4},${this.pacEnemyEyeData.eyeBallPosition + 4} -4,4 -0,0 0,0 -1,-1 z 
         z`);
         ctx.fill(p2);
         ctx.fillStyle = "white";
