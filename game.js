@@ -1,5 +1,6 @@
 gameState = {
-    pause: false
+    pause: false,
+    over: false
 }
 
 canvas = document.getElementById('canvas');
@@ -7,7 +8,7 @@ ctx = canvas.getContext('2d');
 
 function draw() {
 
-    if (gameState.pause) {
+    if (gameState.pause || gameState.over) {
         return
     }
 
@@ -52,6 +53,9 @@ function updatePositons() {
         getPacManCollisionWith(element);
         pacEnemies.forEach(pacEnemy => {
             pacEnemy.getCollisionWith(element)
+            if (getPacManCollisionWith([pacEnemy.x - PACMAN_RADIUS, pacEnemy.y - PACMAN_RADIUS, 2 * PACMAN_RADIUS, 2 * PACMAN_RADIUS, 10])) {
+                gameState.over=true;
+            }
         })
     }
 
