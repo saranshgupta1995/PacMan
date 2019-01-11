@@ -29,7 +29,7 @@ class PacEnemy {
     }
 
     animateEyes() {
-        if(Math.random()<0.1) return
+        if (Math.random() < 0.1) return
         var data = this.pacEnemyEyeData;
         data.tick++;
         if (!(data.tick % 25)) {
@@ -82,6 +82,7 @@ class PacEnemy {
         directions.push(this.y > pacManPosition.y ? 'up' : 'down');
         var direction = directions[Math.floor(Math.random() * directions.length)];
         this.setPacEnemyDirections(direction)
+        return direction
     }
 
     getCollisionWith(element) {
@@ -98,6 +99,7 @@ class PacEnemy {
                 this.goBack();
                 this.changeDirections();
             } else {
+                this.goBack();
                 if (element[0] || element[1]) {
                     this.phase.phase = true;
                     this.phase.element = element;
@@ -110,10 +112,42 @@ class PacEnemy {
 
     }
 
+    getMovementPossibilities() {
+        let cellToLeft = Math.floor((this.x - this.pacEnemySpeed.x) / 40) - 1  // one grid left
+        let cellToTop = Math.floor((this.y - this.pacEnemySpeed.y) / 40) - 1  // one grid up
+
+        if (!~cellToLeft || !~cellToTop || cellToLeft == 18 || cellToTop == 18) {
+            return {
+                left: false,
+                right: false,
+                top: false,
+                bottom: false,
+            }
+        }
+
+        return {
+            left: !GRID_1_RECTS[cellToTop + 1][cellToLeft + 0],
+            right: !GRID_1_RECTS[cellToTop + 1][cellToLeft + 2],
+            top: !GRID_1_RECTS[cellToTop + 0][cellToLeft + 1],
+            bottom: !GRID_1_RECTS[cellToTop + 2][cellToLeft + 1]
+        }
+    }
+
     goForward(units = 1) {
         this.x += this.pacEnemySpeed.x * units;
-        this.y += this.pacEnemySpeed.y * units
+        this.y += this.pacEnemySpeed.y * units;
         this.animateEyes()
+        if (this.pacEnemySpeed.x) {
+            this.y = Math.floor(this.y / 40) * 40 + 20;
+        } else {
+            this.x = Math.floor(this.x / 40) * 40 + 20;
+        }
+        if(this.x%40==20 && this.y%40==20){
+            if ((Math.random() < 0.06) || 
+                (Object.values(this.getMovementPossibilities()).filter(x => x).length > 2 && Math.random() < 0.3)){
+                this.changeDirections();
+            }
+        }
     }
 
     goBack() {
