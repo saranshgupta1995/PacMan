@@ -20,12 +20,6 @@ function isContainedWithin(a, units, val) {
 
 function isTouching(a, b) {
   return isContainedWithin(b, PACMAN_RADIUS, a) || isContainedWithin(b, -PACMAN_RADIUS, a) || isContainedWithin(a, -PACMAN_RADIUS, b) || isContainedWithin(a, PACMAN_RADIUS, b) 
-  // for(var i=0;i<=PACMAN_RADIUS;i++){
-  //   res =( a === b + i || a === b - i);
-  //   if(res){
-  //     return true
-  //   }
-  // }
 }
 
 function checkCollisions(x, y, width, height, radius, pacManPosition) {
@@ -50,4 +44,84 @@ function roundedRect(ctx, x, y, width, height, radius) {
     ctx.lineTo(x + radius, y);
     ctx.arcTo(x, y, x, y + radius, radius);
     ctx.stroke();
+}
+
+function reset(){
+    gameState = {
+        pause: false,
+        over: false,
+        playAgain: false
+    }
+
+    pacmanMouthAngle = {
+        angle: PACMAN_MOUTH_MAX_OPEN,
+        closing: true
+    };
+    pacManDirections = {
+        x: 1,
+        y: 0
+    }
+
+    pacManSpeed = {
+        x: 1,
+        y: 0
+    }
+
+    pacManPosition = {
+        x: GRID_CELL_SIZE / 2,
+        y: GRID_CELL_SIZE / 2
+    }
+    PACMAN_RADIUS = GRID_CELL_SIZE / 2 - 6;
+    PACMAN_MOUTH_MAX_OPEN = 30;
+
+    OUTER_BOUNDARY = [[0, 0, 800, 800, 15]];
+
+    GRID_1 = [...OUTER_BOUNDARY];
+
+    GRID_1_RECTS = [
+        [0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1],
+        [0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0],
+        [0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1],
+        [0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1],
+        [0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0],
+        [1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1],
+        [1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1],
+        [1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1],
+        [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1],
+        [0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1],
+        [0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0],
+        [0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0],
+        [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0],
+        [1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ]
+
+    createRectData(GRID_1_RECTS).forEach(rect => {
+        GRID_1.push(cellToRect(...rect));
+    });
+
+    FOOD_SIZE = 4;
+
+    PAC_ENEMY_NUM = 6;
+
+
+    pacEnemies = [];
+
+    for (let pacEnemy = 0; pacEnemy < PAC_ENEMY_NUM; pacEnemy++) {
+        let xShift = Math.floor(Math.random() * 120);
+        pacEnemies.push(new PacEnemy(400 - 60 + xShift, 400 + (Math.random() < 0.5 ? 20 : -20)));
+    }
+    foodPoints = [];
+    allFoodPoints = [];
+    filteredFoodPoints = [];
+
+    canvas = document.getElementById('backCanvas');
+    bgCtx = canvas.getContext('2d');
+    drawBackdrop();
+
 }

@@ -1,6 +1,7 @@
 gameState = {
     pause: false,
-    over: false
+    over: false,
+    playAgain: false
 }
 
 canvas = document.getElementById('canvas');
@@ -8,7 +9,11 @@ ctx = canvas.getContext('2d');
 
 function draw() {
 
-    if (gameState.pause || gameState.over) {
+    if (gameState.over) {
+        playGameOverAnimation()
+    }
+
+    if (gameState.pause) {
         return
     }
 
@@ -22,6 +27,21 @@ function draw() {
     });
     updatePositons()
     requestAnimationFrame(draw)
+}
+
+function playGameOverAnimation() {
+
+    ctx.clearRect(0, 0, 800, 800);
+    if (killPacMan()) {
+        gameState.playAgain = true;
+        gameState.over = false;
+    };
+    pacEnemies.forEach(pacEnemy => {
+        pacEnemy.drawPacEnemy(ctx);
+        pacEnemy.animateEyes();
+    });
+    requestAnimationFrame(draw);
+
 }
 
 function eatFood() {
@@ -54,7 +74,8 @@ function updatePositons() {
         pacEnemies.forEach(pacEnemy => {
             pacEnemy.getCollisionWith(element)
             if (getPacManCollisionWith([pacEnemy.x - PACMAN_RADIUS, pacEnemy.y - PACMAN_RADIUS, 2 * PACMAN_RADIUS, 2 * PACMAN_RADIUS, 10])) {
-                gameState.over=true;
+                gameState.over = true;
+                gameState.pause = true;
             }
         })
     }
@@ -68,6 +89,10 @@ function setConfig(config) {
             if (!gameState.pause) {
                 requestAnimationFrame(draw)
             }
+
+            if(gameState.playAgain)
+            reset();
+
             break;
     }
 }
