@@ -142,9 +142,9 @@ class PacEnemy {
         } else {
             this.x = Math.floor(this.x / 40) * 40 + 20;
         }
-        if(this.x%40==20 && this.y%40==20){
-            if ((Math.random() < 0.06) || 
-                (Object.values(this.getMovementPossibilities()).filter(x => x).length > 2 && Math.random() < 0.3)){
+        if (this.x % 40 == 20 && this.y % 40 == 20) {
+            if ((Math.random() < 0.06) ||
+                (Object.values(this.getMovementPossibilities()).filter(x => x).length > 2 && Math.random() < 0.3)) {
                 this.changeDirections();
             }
         }
@@ -153,6 +153,23 @@ class PacEnemy {
     goBack() {
         this.x -= this.pacEnemySpeed.x;
         this.y -= this.pacEnemySpeed.y
+    }
+
+    toJSON() {
+        return {
+            x: this.x,
+            y: this.y,
+            pacEnemyEyeData: this.pacEnemyEyeData,
+            pacEnemyDirections: this.pacEnemyDirections,
+            pacEnemySpeed: this.pacEnemySpeed,
+            phase: this.phase
+        }
+    }
+
+    fromJSON(JSONData) {
+        for (var prop in JSONData) {
+            this[prop] = JSONData[prop];
+        }
     }
 
     drawPacEnemy(ctx) {

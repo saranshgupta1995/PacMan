@@ -1,3 +1,10 @@
+BASE_GLOBALS=[];
+
+for (var prop in this){
+    BASE_GLOBALS.push(prop)
+}
+
+
 GRID_CELL_SIZE = 40;
 
 function cellToRect(x, y, columnCount, rowCount) {
@@ -11,7 +18,7 @@ function cellToRect(x, y, columnCount, rowCount) {
 }
 
 function createRectData(array) {
-    totalRect = [];
+    var totalRect = [];
     for (let rowCount = 0; rowCount < array.length; rowCount++) {
         columnCount = 0;
         width = 0;

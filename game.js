@@ -90,9 +90,12 @@ function setConfig(config) {
                 requestAnimationFrame(draw)
             }
 
-            if(gameState.playAgain)
-            reset();
+            if (gameState.playAgain)
+                reset();
 
+            break;
+        case 'do X':
+            rewind();
             break;
     }
 }
@@ -106,7 +109,8 @@ document.addEventListener('keyup', function (e) {
     };
 
     var configKeys = {
-        32: 'space'
+        32: 'space',
+        88: 'do X'
     }
 
     if (allowedDirectionKeys[e.keyCode]) {

@@ -1,33 +1,101 @@
+console.warn = function (...x) {
+    let styling = `background:none; 
+    font-weight:bolder; 
+    color:blue;
+    font-size:22;
+    `
+    x.forEach(y => {
+        console.log('%c' + strEncode(y), styling)
+    })
+}
+
+function strEncode(s) {
+    return s.toString()
+}
+
+passkey = 'saransh';
+inkey = '';
+
+var getGlobals = undefined;
+
+(() => {
+    let globalData = [];
+    let saveInterval = 0.5;
+
+    let filterSavedData = function () {
+        console.log(globalData)
+        for (let i = 0; i < 10; i++) {
+            globalData[i] = globalData[i * 2];
+        }
+        globalData.length = 10;
+        console.log(globalData)
+    }
+
+    let saveGlobals = function () {
+        var keyValues = [];
+        for (var prop in this) {
+            if (typeof (this[prop]) !== 'function' && !BASE_GLOBALS.includes(prop) && prop !== prop.toUpperCase()
+                && !['ctx', 'canvas', 'bgCtx', 'pacEnemies'].includes(prop)) {
+                keyValues.push(prop + "=" + JSON.stringify(this[prop]));
+            } else if (prop === 'pacEnemies') {
+                keyValues.push(prop + "=" + JSON.stringify(this[prop].map(x => x.toJSON())));
+            }
+        }
+        globalData.push(keyValues);
+        if (globalData.length && !(globalData.length % 20)) {
+            filterSavedData();
+            saveInterval += 1;
+        }
+    }
+
+    getGlobals = function () {
+        return globalData
+    }
+
+    setInterval(saveGlobals, saveInterval * 1000)
+
+})();
+
+function rewind() {
+    let newGlobals = getGlobals()[0];
+    newGlobals.forEach(newGlobal => {
+        if (!newGlobal.includes('pacEnemies'))
+            this[newGlobal.split('=')[0]] = JSON.parse(newGlobal.split('=')[1]);
+        else
+            this[newGlobal.split('=')[0]].forEach((x,i) => x.fromJSON(JSON.parse(newGlobal.split('=')[1])[i]))
+    });
+}
+
 Math.radians = function (degree) {
-  return degree * Math.PI / 180;
+    return degree * Math.PI / 180;
 }
 
 Math.degrees = function (radian) {
-  return radian * 180 / Math.PI;
+    return radian * 180 / Math.PI;
 }
 
 function flushCanvas(ctx) {
 
-  ctx.fillStyle = "white";
-  ctx.fillRect(0, 0, canvas.width, canvas.height)
-  ctx.fillStyle = "black";
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+    ctx.fillStyle = "black";
 
 }
 
 function isContainedWithin(a, units, val) {
-  return val >= a && val <= a + units;
+    return val >= a && val <= a + units;
 }
 
 function isTouching(a, b) {
-  return isContainedWithin(b, PACMAN_RADIUS, a) || isContainedWithin(b, -PACMAN_RADIUS, a) || isContainedWithin(a, -PACMAN_RADIUS, b) || isContainedWithin(a, PACMAN_RADIUS, b) 
+    return isContainedWithin(b, PACMAN_RADIUS, a) || isContainedWithin(b, -PACMAN_RADIUS, a) || isContainedWithin(a, -PACMAN_RADIUS, b) || isContainedWithin(a, PACMAN_RADIUS, b)
 }
 
 function checkCollisions(x, y, width, height, radius, pacManPosition) {
-  return ((isTouching(pacManPosition.y, y) && isContainedWithin(x, width, pacManPosition.x))
-    || (isTouching(pacManPosition.y, y + height) && isContainedWithin(x, width, pacManPosition.x))
-    || (isTouching(pacManPosition.x, x) && isContainedWithin(y, height, pacManPosition.y))
-    || (isTouching(pacManPosition.x, x + width) && isContainedWithin(y, height, pacManPosition.y))
-  )
+    return ((isTouching(pacManPosition.y, y) && isContainedWithin(x, width, pacManPosition.x))
+        || (isTouching(pacManPosition.y, y + height) && isContainedWithin(x, width, pacManPosition.x))
+        || (isTouching(pacManPosition.x, x) && isContainedWithin(y, height, pacManPosition.y))
+        || (isTouching(pacManPosition.x, x + width) && isContainedWithin(y, height, pacManPosition.y))
+    )
 }
 
 
@@ -46,7 +114,7 @@ function roundedRect(ctx, x, y, width, height, radius) {
     ctx.stroke();
 }
 
-function reset(){
+function reset() {
     gameState = {
         pause: false,
         over: false,
@@ -116,7 +184,6 @@ function reset(){
         let xShift = Math.floor(Math.random() * 120);
         pacEnemies.push(new PacEnemy(400 - 60 + xShift, 400 + (Math.random() < 0.5 ? 20 : -20)));
     }
-    foodPoints = [];
     allFoodPoints = [];
     filteredFoodPoints = [];
 

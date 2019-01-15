@@ -1,4 +1,3 @@
-var foodPoints = [];
 var allFoodPoints = [];
 var filteredFoodPoints = [];
 
@@ -6,7 +5,6 @@ var canvas = document.getElementById('backCanvas');
 var bgCtx = canvas.getContext('2d');
 
 function drawBackdrop(){
-    foodPoints = [];
     allFoodPoints = [];
     flushCanvas(bgCtx)
     definePacFood(bgCtx)
