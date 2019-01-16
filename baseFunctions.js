@@ -1,3 +1,4 @@
+
 console.warn = function (...x) {
     let styling = `background:none; 
     font-weight:bolder; 
@@ -20,29 +21,31 @@ var getGlobals = undefined;
 
 (() => {
     let globalData = [];
-    let saveInterval = 0.5;
+    let saveInterval = 1;
+    let dataLimit = 30;
 
     let filterSavedData = function () {
-        console.log(globalData)
-        for (let i = 0; i < 10; i++) {
+        console.log(JSON.parse(JSON.stringify(globalData)))
+        for (let i = 0; i < dataLimit; i++) {
             globalData[i] = globalData[i * 2];
         }
-        globalData.length = 10;
-        console.log(globalData)
+        globalData.length = dataLimit;
+        console.log(JSON.parse(JSON.stringify(globalData)))
     }
 
     let saveGlobals = function () {
+        if (gameState.pause) return;
         var keyValues = [];
         for (var prop in this) {
             if (typeof (this[prop]) !== 'function' && !BASE_GLOBALS.includes(prop) && prop !== prop.toUpperCase()
-                && !['ctx', 'canvas', 'bgCtx', 'pacEnemies'].includes(prop)) {
+                && !['ctx', 'canvas', 'bgCtx', 'pacEnemies', 'gameState'].includes(prop)) {
                 keyValues.push(prop + "=" + JSON.stringify(this[prop]));
             } else if (prop === 'pacEnemies') {
                 keyValues.push(prop + "=" + JSON.stringify(this[prop].map(x => x.toJSON())));
             }
         }
         globalData.push(keyValues);
-        if (globalData.length && !(globalData.length % 20)) {
+        if (globalData.length && !(globalData.length % (2 * dataLimit))) {
             filterSavedData();
             saveInterval += 1;
         }
@@ -56,14 +59,18 @@ var getGlobals = undefined;
 
 })();
 
-function rewind() {
-    let newGlobals = getGlobals()[0];
+function rewind(val) {
+    let newGlobals = getGlobals()[val];
     newGlobals.forEach(newGlobal => {
         if (!newGlobal.includes('pacEnemies'))
             this[newGlobal.split('=')[0]] = JSON.parse(newGlobal.split('=')[1]);
         else
-            this[newGlobal.split('=')[0]].forEach((x,i) => x.fromJSON(JSON.parse(newGlobal.split('=')[1])[i]))
+            this[newGlobal.split('=')[0]].forEach((x, i) => x.fromJSON(JSON.parse(newGlobal.split('=')[1])[i]))
     });
+    gameState.rewind=true;
+    draw()
+    drawBackdrop()
+    gameState.rewind=false;
 }
 
 Math.radians = function (degree) {
@@ -190,5 +197,12 @@ function reset() {
     canvas = document.getElementById('backCanvas');
     bgCtx = canvas.getContext('2d');
     drawBackdrop();
+
+}
+
+function rewindTo(e) {
+    console.log(`restin`, e.target.value)
+    if (e.target.value <= getGlobals().length)
+        rewind(e.target.value);
 
 }

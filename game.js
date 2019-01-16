@@ -1,7 +1,8 @@
 gameState = {
     pause: false,
     over: false,
-    playAgain: false
+    playAgain: false,
+    rewind: false
 }
 
 canvas = document.getElementById('canvas');
@@ -13,7 +14,7 @@ function draw() {
         playGameOverAnimation()
     }
 
-    if (gameState.pause) {
+    if (gameState.pause && !gameState.rewind) {
         return
     }
 
