@@ -20,9 +20,8 @@ function monkeyPatch(elem, patch) {
 setInterval(() => {
 
     let mothers = getAllElementsWithAttribute('cPatch');
-    let adopted=[];
 
-    hiddenStuff.forEach((element,index) => {
+    hiddenStuff.forEach((element, index) => {
         let crazyIfValue = this;
         element.getAttribute('crazyIf').split('.').forEach(x => {
             crazyIfValue = crazyIfValue[x];
@@ -30,17 +29,21 @@ setInterval(() => {
         if (crazyIfValue) {
             let myPatch = element.getAttribute('cPatch');
             let momIndex = -1;
-            let mom=mothers.find((x, i) => {
+            let mom = mothers.find((x, i) => {
                 momIndex = i;
                 return x.getAttribute('cPatch') === myPatch;
             })
+            if (element.onMount)
+                element.onMount();
             mom.appendChild(element);
             mom.removeAttribute('cPatch');
             element.removeAttribute('cPatch');
             mothers.splice(momIndex, 1);
-            hiddenStuff.splice(index,1)
+            hiddenStuff.splice(index, 1)
         }
     })
+
+    // TODO children order is not maintained while pushing back
 
     getAllElementsWithAttribute('crazyIf').forEach((element, i) => {
         let crazyIfValue = this;

@@ -114,7 +114,7 @@ document.addEventListener('keyup', function (e) {
         88: 'do X'
     }
 
-    if (allowedDirectionKeys[e.keyCode]) {
+    if (allowedDirectionKeys[e.keyCode] && !gameState.pause) {
         setPacManDirections(allowedDirectionKeys[e.keyCode])
     }
 
@@ -124,3 +124,8 @@ document.addEventListener('keyup', function (e) {
 });
 
 draw()
+
+document.getElementsByTagName('input')[0].onMount = function () {
+    this.max = getGlobals().length;
+    this.value = this.max;
+}

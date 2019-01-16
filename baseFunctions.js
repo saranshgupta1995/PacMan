@@ -1,4 +1,3 @@
-
 console.warn = function (...x) {
     let styling = `background:none; 
     font-weight:bolder; 
@@ -204,5 +203,4 @@ function rewindTo(e) {
     console.log(`restin`, e.target.value)
     if (e.target.value <= getGlobals().length)
         rewind(e.target.value);
-
 }
