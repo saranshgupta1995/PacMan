@@ -88,7 +88,8 @@ function setConfig(config) {
         case 'space':
             gameState.pause = !gameState.pause;
             if (!gameState.pause) {
-                requestAnimationFrame(draw)
+                requestAnimationFrame(draw);
+                resetToRewindedLevel(rewindedLevel)
             }
 
             if (gameState.playAgain)
