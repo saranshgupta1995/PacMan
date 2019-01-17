@@ -16,61 +16,6 @@ function strEncode(s) {
 passkey = 'saransh';
 inkey = '';
 
-var getGlobals = undefined;
-
-(() => {
-    let globalData = [];
-    let saveInterval = 1;
-    let dataLimit = 30;
-
-    let filterSavedData = function () {
-        console.log(JSON.parse(JSON.stringify(globalData)))
-        for (let i = 0; i < dataLimit; i++) {
-            globalData[i] = globalData[i * 2];
-        }
-        globalData.length = dataLimit;
-        console.log(JSON.parse(JSON.stringify(globalData)))
-    }
-
-    let saveGlobals = function () {
-        if (gameState.pause) return;
-        var keyValues = [];
-        for (var prop in this) {
-            if (typeof (this[prop]) !== 'function' && !BASE_GLOBALS.includes(prop) && prop !== prop.toUpperCase()
-                && !['ctx', 'canvas', 'bgCtx', 'pacEnemies', 'gameState'].includes(prop)) {
-                keyValues.push(prop + "=" + JSON.stringify(this[prop]));
-            } else if (prop === 'pacEnemies') {
-                keyValues.push(prop + "=" + JSON.stringify(this[prop].map(x => x.toJSON())));
-            }
-        }
-        globalData.push(keyValues);
-        if (globalData.length && !(globalData.length % (2 * dataLimit))) {
-            filterSavedData();
-            saveInterval += 1;
-        }
-    }
-
-    getGlobals = function () {
-        return globalData
-    }
-
-    setInterval(saveGlobals, saveInterval * 1000)
-
-})();
-
-function rewind(val) {
-    let newGlobals = getGlobals()[val];
-    newGlobals.forEach(newGlobal => {
-        if (!newGlobal.includes('pacEnemies'))
-            this[newGlobal.split('=')[0]] = JSON.parse(newGlobal.split('=')[1]);
-        else
-            this[newGlobal.split('=')[0]].forEach((x, i) => x.fromJSON(JSON.parse(newGlobal.split('=')[1])[i]))
-    });
-    gameState.rewind=true;
-    draw()
-    drawBackdrop()
-    gameState.rewind=false;
-}
 
 Math.radians = function (degree) {
     return degree * Math.PI / 180;
@@ -200,7 +145,8 @@ function reset() {
 }
 
 function rewindTo(e) {
-    console.log(`restin`, e.target.value)
-    if (e.target.value <= getGlobals().length)
+    if (e.target.value < getGlobals().length) {
         rewind(e.target.value);
+        // resetToRewindedLevel(e.target.value);
+    }
 }
