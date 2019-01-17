@@ -138,9 +138,9 @@ function coolText (gameText) {
         frontCtx.fillText(textArray[i], frontCanvas.width/2, textHeight + (i * LINE_HEIGHT));
     }
 }
-// coolText("SARANSH");
-// coolText("GUPTA");
-// coolText("GARIMA");
-// coolText("SAXENA");
-// coolText("WOAH");
+// coolText("CUSTARD APPLE");
+// coolText("BANANA");
+// coolText("APPLE");
+// coolText("GRAPES");
+// coolText("ORANGES");
 draw()
