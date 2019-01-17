@@ -123,9 +123,24 @@ document.addEventListener('keyup', function (e) {
     }
 });
 
-draw()
-
-document.getElementsByTagName('input')[0].onMount = function () {
-    this.max = getGlobals().length;
-    this.value = this.max;
+textString=""
+function coolText (gameText) {
+    textString+=gameText + '\n';
+    textArray = textString.split('\n');
+    var frontCanvas = document.getElementById('frontCanvas');
+    frontCtx = frontCanvas.getContext('2d');
+    frontCtx.clearRect(0, 0, frontCanvas.width, frontCanvas.height);
+    frontCtx.font = "40px Comic Sans MS";
+    frontCtx.fillStyle = "black";
+    frontCtx.textAlign = "center";
+    textHeight = frontCanvas.height/2 - (textArray.length/2 * LINE_HEIGHT);
+    for(var i = 0; i < textArray.length; i++) {
+        frontCtx.fillText(textArray[i], frontCanvas.width/2, textHeight + (i * LINE_HEIGHT));
+    }
 }
+// coolText("SARANSH");
+// coolText("GUPTA");
+// coolText("GARIMA");
+// coolText("SAXENA");
+// coolText("WOAH");
+draw()
