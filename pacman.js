@@ -81,7 +81,6 @@ function setPacManDirections(direction) {
     pacManSpeed.x = 0;
     pacManSpeed.y = 0;
 
-    newDirection = {};
     switch (direction) {
         case ('left'): {
             pacManDirections.x = -1

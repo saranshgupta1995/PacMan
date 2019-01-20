@@ -89,7 +89,6 @@ function setConfig(config) {
             gameState.pause = !gameState.pause;
             if (!gameState.pause) {
                 requestAnimationFrame(draw);
-                resetToRewindedLevel(rewindedLevel)
             }
 
             if (gameState.playAgain)
@@ -124,24 +123,9 @@ document.addEventListener('keyup', function (e) {
     }
 });
 
-textString=""
-function coolText (gameText) {
-    textString+=gameText + '\n';
-    textArray = textString.split('\n');
-    var frontCanvas = document.getElementById('frontCanvas');
-    frontCtx = frontCanvas.getContext('2d');
-    frontCtx.clearRect(0, 0, frontCanvas.width, frontCanvas.height);
-    frontCtx.font = "40px Comic Sans MS";
-    frontCtx.fillStyle = "black";
-    frontCtx.textAlign = "center";
-    textHeight = frontCanvas.height/2 - (textArray.length/2 * LINE_HEIGHT);
-    for(var i = 0; i < textArray.length; i++) {
-        frontCtx.fillText(textArray[i], frontCanvas.width/2, textHeight + (i * LINE_HEIGHT));
-    }
-}
-// coolText("CUSTARD APPLE");
-// coolText("BANANA");
-// coolText("APPLE");
-// coolText("GRAPES");
-// coolText("ORANGES");
 draw()
+
+// document.getElementsByTagName('input')[0].onMount = function () {
+//     this.max = getGlobals().length;
+//     this.value = this.max;
+// }

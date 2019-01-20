@@ -145,8 +145,6 @@ function reset() {
 }
 
 function rewindTo(e) {
-    if (e.target.value < getGlobals().length) {
         rewind(e.target.value);
         // resetToRewindedLevel(e.target.value);
-    }
 }

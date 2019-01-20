@@ -71,5 +71,3 @@ createRectData(GRID_1_RECTS).forEach(rect => {
 FOOD_SIZE = 4;
 
 PAC_ENEMY_NUM = 6;
-
-LINE_HEIGHT = 35;

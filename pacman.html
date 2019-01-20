@@ -9,13 +9,13 @@
 </head>
 
 <body style="position: relative">
-    <canvas style="position: absolute; z-index: 3;" id="frontCanvas" width="800px" height="800px"></canvas>
     <canvas style="position: absolute; z-index: -1;" id="backCanvas" width="800px" height="800px"></canvas>
     <canvas id="canvas" width="800px" height="800px"></canvas>
     <div style="position: absolute; left: 800px; top:0;">
         <input crazyIf="gameState.pause" type="range" min="0" max="30" onchange="rewindTo(event)" value="0">
     </div>
 </body>
+<script src="./snappy.js"></script>
 <script src="./changeDetector.js"></script>
 <script src="./constants.js"></script>
 <script src="./baseFunctions.js"></script>
