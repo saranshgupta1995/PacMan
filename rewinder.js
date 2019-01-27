@@ -45,8 +45,8 @@ var resetToRewindedLevel = undefined;
 
 var rewindedLevel = 1000;
 
-function rewind(val) {
-    rewindedLevel = val;
+function rewind(hash) {
+    // rewindedLevel = val;
     // let newGlobals = getGlobals()[val];
     // newGlobals.forEach(newGlobal => {
     //     if (!newGlobal.includes('pacEnemies'))
@@ -54,7 +54,7 @@ function rewind(val) {
     //     else
     //         this[newGlobal.split('=')[0]].forEach((x, i) => x.fromJSON(JSON.parse(newGlobal.split('=')[1])[i]))
     // });
-    restoreSnap('pika')
+    restoreSnap(hash)
     gameState.rewind = true;
     draw()
     drawBackdrop()

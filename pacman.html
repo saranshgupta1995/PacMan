@@ -11,9 +11,14 @@
 <body style="position: relative">
     <canvas style="position: absolute; z-index: -1;" id="backCanvas" width="800px" height="800px"></canvas>
     <canvas id="canvas" width="800px" height="800px"></canvas>
-    <div style="position: absolute; left: 800px; top:0;">
+    <!-- <div style="position: absolute; left: 800px; top:0;">
         <input crazyIf="gameState.pause" type="range" min="0" max="30" onchange="rewindTo(event)" value="0">
-    </div>
+    </div> -->
+    <ul style="right: 0; position: absolute; width: 200px; top: 0; list-style: none">
+        <!-- <li style="width: 100%; height: 200px;">
+            <img alt="Heya!" id="canvasSnapshotImg" style="height: 100%;">
+        </li> -->
+    </ul>
 </body>
 <script src="./snappy.js"></script>
 <script src="./changeDetector.js"></script>
