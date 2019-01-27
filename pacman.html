@@ -11,13 +11,7 @@
 <body style="position: relative">
     <canvas style="position: absolute; z-index: -1;" id="backCanvas" width="800px" height="800px"></canvas>
     <canvas id="canvas" width="800px" height="800px"></canvas>
-    <!-- <div style="position: absolute; left: 800px; top:0;">
-        <input crazyIf="gameState.pause" type="range" min="0" max="30" onchange="rewindTo(event)" value="0">
-    </div> -->
-    <ul style="right: 0; position: absolute; width: 200px; top: 0; list-style: none">
-        <!-- <li style="width: 100%; height: 200px;">
-            <img alt="Heya!" id="canvasSnapshotImg" style="height: 100%;">
-        </li> -->
+    <ul style="right: 0; position: absolute; width: 200px; top: 0; list-style: none; margin: 0">
     </ul>
 </body>
 <script src="./snappy.js"></script>
@@ -29,5 +23,28 @@
 <script src="./backdrop.js"></script>
 <script src="./game.js"></script>
 <script src="./rewinder.js"></script>
+<style>
+    .newSnap {
+        position: absolute;
+        top: 0;
+        right: 1000px;
+        z-index: -29;
+        width: 800px;
+        transition-duration: 500ms;
+    }
+    .newBgSnap {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -30;
+        width: 200px;
+    }
+    .imageListElemet {
+        width: 100%;
+        height: 200px;
+        position: relative;
+        margin-bottom: 20px;
+    }
+</style>
 
 </html>

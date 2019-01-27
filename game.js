@@ -103,31 +103,25 @@ function setConfig(config) {
     }
 }
 
-showImageAnimation = false;
 
 function snapshot() {
     var ulTag = document.getElementsByTagName('ul')[0];
     var canvasSnapshot = canvas.toDataURL();
+    var backCanvasSrc = document.getElementById('backCanvas').toDataURL();
     var liTag = document.createElement('li');
-    var hrTag = document.createElement('hr');
     var imageAnimate = document.createElement('img');
-    liTag.style.height = '200px';
-    liTag.style.width = '100%';
+    var backImage = document.createElement('img');
+    backImage.classList.add('newBgSnap')
+    liTag.classList.add('imageListElemet');
     let hash = ulTag.childElementCount;
     liTag.onclick = function() {
         if(gameState.pause)
             rewind(hash);
     }
     imageAnimate.src = canvasSnapshot;
-    imageAnimate.style.position = "absolute";
-    imageAnimate.style.top = 0;
-    imageAnimate.style.zIndex = -30;
-    imageAnimate.style.right = '1000px';
-    imageAnimate.style.width = '800px';
-    imageAnimate.style.transitionDuration = "500ms";
-    showImageAnimation = true;
+    backImage.src = backCanvasSrc;
+    imageAnimate.classList.add('newSnap');
     liTag.appendChild(imageAnimate);
-    liTag.appendChild(hrTag)
     ulTag.insertChildAtIndex(liTag, 0);
     ulTag.style.opacity = gameState.pause? 1 : 0.5;    
     setTimeout(()=>{
@@ -135,8 +129,8 @@ function snapshot() {
         imageAnimate.style.width = '200px';
     },50)
     setTimeout(() => {
-        showImageAnimation = false;
         imageAnimate.style.position = "relative";
+        liTag.appendChild(backImage);
     },550)
     takeSnap(hash, this, ["ctx","parent","canvas","bgCtx","rewindedLevel","gameState","callee","caller"]);
 }
