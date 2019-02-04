@@ -8,12 +8,20 @@
     <title>Pacman</title>
 </head>
 
-<body style="position: relative">
-    <canvas style="position: absolute; z-index: -1;" id="backCanvas" width="800px" height="800px"></canvas>
-    <canvas id="canvas" width="800px" height="800px"></canvas>
-    <ul style="right: 0; position: absolute; width: 200px; top: 0; list-style: none; margin: 0">
-    </ul>
+<body>
+    <div crazyIf="showInputScreen">
+        <input crazy- value]="userName" id="inputUser" type="text">
+        <button onclick="setUserName()">Submit</button>
+    </div>
+    <div id="gameDiv" style="position: relative" crazyIf="showGame">
+        <canvas style="position: absolute; z-index: -1;" id="backCanvas" width="800px" height="800px"></canvas>
+        <canvas id="canvas" width="800px" height="800px"></canvas>
+        <ul style="right: 0; position: absolute; width: 200px; top: 0; list-style: none; margin: 0">
+        </ul>
+    </div>
 </body>
+<script src="./master.js"></script>
+<!-- <script src="./snappy.js"></script> -->
 <script src="./snappy.js"></script>
 <script src="./changeDetector.js"></script>
 <script src="./constants.js"></script>

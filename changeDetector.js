@@ -64,13 +64,13 @@ setInterval(() => {
                 momIndex = i;
                 return x.getAttribute('cPatch').split(',').includes(myPatch);
             })
-            if (element.onMount)
-                element.onMount();
             mom.insertChildAtIndex(element, myPatch.split('-')[0])
             removeChildPatchFromParent(mom, myPatch);
             element.removeAttribute('cPatch');
             mothers.splice(momIndex, 1);
             hiddenStuff.splice(index, 1)
+            if (element.onMount)
+                element.onMount();
         }
     })
 
