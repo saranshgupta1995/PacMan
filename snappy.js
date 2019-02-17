@@ -1,13 +1,7 @@
-// Assumption 1 : Data types dont change
-
 (function (globalScope) {
 
 
     let BASE_GLOBALS = ["parent", "top", "frames", "location", "self", "window", "document", "customElements", "history", "locationbar", "menubar", "personalbar", "scrollbars", "statusbar", "toolbar", "navigator", "origin", "external", "screen", "innerWidth", "innerHeight", "visualViewport", "outerWidth", "outerHeight", "devicePixelRatio", "clientInformation", "styleMedia", "isSecureContext", "performance", "crypto", "indexedDB", "webkitStorageInfo", "sessionStorage", "localStorage", "chrome", "speechSynthesis", "applicationCache", "caches", "prop", "PERSISTENT"];
-    // for (var prop in globalScope) {
-    //     BASE_GLOBALS.push(prop)
-    // }
-
     var snaps = {};
 
     globalScope.snappyOrigHash = 'pikachu';
